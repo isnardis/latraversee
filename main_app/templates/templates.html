@@ -1,0 +1,126 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mon Site{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- Navigation principale -->
+    <nav>
+        <a href="{% url 'home' %}">Accueil</a>
+        <a href="{% url 'registres' %}">Registres</a>
+        <a href="{% url 'poemes' %}">Poèmes</a>
+        <a href="{% url 'memoire' %}">Mémoire</a>
+        <a href="{% url 'a_propos' %}">À Propos</a>
+    </nav>
+    
+    <!-- Contenu principal -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
+
+<!-- templates/home.html -->
+{% extends 'base.html' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+    <h1>Bienvenue sur notre site</h1>
+    <p>Texte d'introduction ici...</p>
+{% endblock %}
+
+<!-- templates/registres.html -->
+{% extends 'base.html' %}
+
+{% block title %}Registres{% endblock %}
+
+{% block content %}
+    <h1>Registres</h1>
+    <!-- Formulaire de filtrage des vidéos -->
+    <form method="get">
+        <select name="language">
+            <option value="">Toutes les langues</option>
+            <option value="PT">Portugais</option>
+            <option value="FR">Français</option>
+            <option value="BI">Bilingue</option>
+        </select>
+        <select name="location">
+            <option value="">Toutes les localisations</option>
+            <option value="EX">Extérieur</option>
+            <option value="IN">Intérieur</option>
+        </select>
+        <select name="has_music">
+            <option value="">Avec ou sans musique</option>
+            <option value="Y">Avec Musique</option>
+            <option value="N">Sans Musique</option>
+        </select>
+        <button type="submit">Filtrer</button>
+    </form>
+    <!-- Affichage des vidéos -->
+    {% for video in videos %}
+        <div class="video">
+            <h2>{{ video.title }}</h2>
+            <video src="{{ video.video_file.url }}" controls></video>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+<!-- templates/poemes.html -->
+{% extends 'base.html' %}
+
+{% block title %}Poèmes{% endblock %}
+
+{% block content %}
+    <h1>Poèmes</h1>
+    <!-- Formulaire de filtrage des poèmes -->
+    <form method="get">
+        <select name="language">
+            <option value="">Toutes les langues</option>
+            <option value="PT">Portugais</option>
+            <option value="FR">Français</option>
+            <option value="BI">Bilingue</option>
+        </select>
+        <button type="submit">Filtrer</button>
+    </form>
+    <!-- Affichage des poèmes -->
+    {% for poem in poems %}
+        <div class="poem">
+            <h2>{{ poem.title }}</h2>
+            <p>{{ poem.content }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+<!-- templates/memoire.html -->
+{% extends 'base.html' %}
+
+{% block title %}Mémoire{% endblock %}
+
+{% block content %}
+    <h1>Mémoire</h1>
+    {% if memoire %}
+        <h2>{{ memoire.title }}</h2>
+        <p>{{ memoire.content }}</p>
+        <a href="{{ memoire.file.url }}" download>Télécharger le Mémoire</a>
+    {% else %}
+        <p>Aucun mémoire disponible pour le moment.</p>
+    {% endif %}
+{% endblock %}
+
+<!-- templates/a_propos.html -->
+{% extends 'base.html' %}
+
+{% block title %}À Propos{% endblock %}
+
+{% block content %}
+    <h1>À Propos</h1>
+    <p>Informations sur le projet ici...</p>
+{% endblock %}
